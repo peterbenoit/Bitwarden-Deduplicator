@@ -1,16 +1,23 @@
 import json
+import argparse
 from collections import defaultdict
 
+# Function to load the JSON file
 def load_json(file_path):
     with open(file_path, "r") as file:
         return json.load(file)
 
-def find_duplicates(items):
+# Function to find duplicates
+def find_duplicates(items, type_filter=None):
     unique_items = []
     duplicates = defaultdict(list)
     seen = set()
 
     for item in items:
+        # Skip if type doesn't match the filter
+        if type_filter and item["type"] != type_filter:
+            continue
+
         if item["type"] == 1:  # Login
             unique_key = (
                 item["name"],
@@ -38,6 +45,7 @@ def find_duplicates(items):
 
     return unique_items, duplicates
 
+# Function to save JSON data
 def save_json(data, file_path):
     # Convert tuple keys to strings for JSON compatibility
     if "duplicates" in data:
@@ -45,15 +53,33 @@ def save_json(data, file_path):
     with open(file_path, "w") as file:
         json.dump(data, file, indent=4)
 
-# Load the Bitwarden JSON file
-data = load_json("bitwarden-export.json")
+# Main function
+def main():
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description="Bitwarden Deduplication Script")
+    parser.add_argument("input", help="Path to the Bitwarden JSON export file")
+    parser.add_argument("--type", type=int, choices=[1, 2, 3, 4], help="Filter by type: 1 (Login), 2 (Secure Note), 3 (Card), 4 (Identity)")
+    parser.add_argument("--output-unique", action="store_true", help="Save only unique items")
+    parser.add_argument("--output-duplicates", action="store_true", help="Save only duplicate items")
+    parser.add_argument("--output-both", action="store_true", help="Save both unique and duplicate items (default)")
 
-# Process duplicates
-unique_items, duplicates = find_duplicates(data["items"])
+    args = parser.parse_args()
 
-# Save unique items and duplicates to separate files
-save_json({"items": unique_items}, "bitwarden_cleaned.json")
-save_json({"duplicates": duplicates}, "bitwarden_duplicates.json")
+    # Load the input JSON file
+    data = load_json(args.input)
 
-print(f"Unique items saved to bitwarden_cleaned.json")
-print(f"Duplicates saved to bitwarden_duplicates.json")
+    # Process duplicates
+    unique_items, duplicates = find_duplicates(data["items"], type_filter=args.type)
+
+    # Save results based on the selected options
+    if args.output_unique or args.output_both:
+        save_json({"items": unique_items}, "bitwarden_cleaned.json")
+        print("Unique items saved to bitwarden_cleaned.json")
+
+    if args.output_duplicates or args.output_both:
+        save_json({"duplicates": duplicates}, "bitwarden_duplicates.json")
+        print("Duplicates saved to bitwarden_duplicates.json")
+
+# Entry point
+if __name__ == "__main__":
+    main()
