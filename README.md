@@ -72,7 +72,7 @@ By using a virtual environment, you can ensure your project dependencies are iso
     - **`bitwarden_duplicates.json`**: Contains duplicates for review.
 5. Import the cleaned file back into Bitwarden after reviewing and validating its content.
 
-## Disclaimer and Warnings
+## ⚠️ Disclaimer and Warnings
 
 -   **Review and Validate Output**:
 
