@@ -60,7 +60,7 @@ By using a virtual environment, you can ensure your project dependencies are iso
 1. Export your Bitwarden vault into JSON format from the web or desktop application.
 2. Clone the repository:
     ```bash
-    git clone https://github.com/peterbenoit/Bitwarden-Deduplicator
+    git clone https://github.com/peterbenoit/Bitwarden-Deduplicator.git
     cd Bitwarden-Deduplicator
     ```
 3. Run the provided shell script to process your export:
