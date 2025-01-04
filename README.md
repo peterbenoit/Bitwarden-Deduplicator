@@ -55,12 +55,46 @@ A Python-based tool to identify and remove duplicate entries from Bitwarden expo
 
 By using a virtual environment, you can ensure your project dependencies are isolated and easy to manage.
 
+## How It Works
+
+1. Export your Bitwarden vault into JSON format from the web or desktop application.
+2. Clone the repository:
+    ```bash
+    git clone https://github.com/peterbenoit/Bitwarden-Deduplicator
+    cd Bitwarden-Deduplicator
+    ```
+3. Run the provided shell script to process your export:
+    ```bash
+    ./run_python.sh
+    ```
+4. Review the output files:
+    - **`bitwarden_cleaned.json`**: Contains unique entries.
+    - **`bitwarden_duplicates.json`**: Contains duplicates for review.
+5. Import the cleaned file back into Bitwarden after reviewing and validating its content.
+
+## Disclaimer and Warnings
+
+-   **Review and Validate Output**:
+
+    -   The tool does not auto-update your Bitwarden vault. You must manually review the generated files (`bitwarden_cleaned.json` and `bitwarden_duplicates.json`) before importing anything back into your vault.
+
+-   **Sensitive Data**:
+
+    -   The tool processes sensitive information (passwords, card details, etc.). Ensure you run it in a secure environment and delete the processed files after use if they’re no longer needed.
+
+-   **Back Up Your Vault**:
+
+    -   Always back up your Bitwarden vault before making any changes. Mistakes during import or manual edits can lead to data loss.
+
+-   **No Liability**:
+    -   Use the tool **at your own risk**. We are not responsible for any data loss or issues arising from the use of this tool.
+
 ## Setup
 
 1. **Clone the Repository**
 
     ```bash
-    git clone https://github.com/peterbenoit/Bitwarden-Deduplicator
+    git clone <your-repo-url>
     cd Bitwarden-Deduplicator
     ```
 
@@ -84,43 +118,6 @@ By using a virtual environment, you can ensure your project dependencies are iso
     source venv/bin/activate
     pip install -r requirements.txt
     ```
-
-## Usage
-
-### Interactive Mode
-
-Run the shell script without arguments:
-
-```bash
-./run_python.sh
-```
-
-The script will guide you through:
-
--   Choosing the input JSON file.
--   Selecting the type of entries to process.
--   Deciding whether to save unique items, duplicates, or both.
-
-### Command-Line Mode
-
-Run the shell script with arguments:
-
-```bash
-./run_python.sh <input-file> [--type <type>] [--output-unique|--output-duplicates|--output-both]
-```
-
--   `<input-file>`: Path to your Bitwarden JSON export file.
--   `--type`: Filter by type (1=Login, 2=Secure Note, 3=Card, 4=Identity).
--   Output options:
-    -   `--output-unique`: Save only unique items.
-    -   `--output-duplicates`: Save only duplicates.
-    -   `--output-both`: Save both (default).
-
-#### Example
-
-```bash
-./run_python.sh bitwarden-export.json --type 1 --output-both
-```
 
 ## Output
 
